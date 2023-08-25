@@ -3,7 +3,7 @@ var assert = require('assert'),
     utils = require('./utils'),
     moment = require('moment'),
     should = require('should'),
-    xmldom = require('xmldom'),
+    xmldom = require('@xmldom/xmldom'),
     xmlenc = require('xml-encryption'),
     saml = require('../lib/saml20');
 
