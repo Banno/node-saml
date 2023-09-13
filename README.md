@@ -1,3 +1,26 @@
+# Banno Info
+
+## Banno Release Process
+After a pull request is merged into master you may want to release a new version of the @banno/saml package.
+To do this follow the process defined below on your development machine:
+
+1. Switch branch to master
+   - `git switch master`
+2. Get the latest changes from the remote
+   - `git pull`
+3. Increment version
+   - `npm version minor`
+4. Publish to Artifactory
+   - `npm publish`
+
+At this point a new version has been created and published to Artifactory. You can now update any dependent products to
+this new version.
+
+---
+## Original README:
+
+---
+
 Create SAML assertions.
 
 NOTE: currently supports SAML 1.1 tokens
