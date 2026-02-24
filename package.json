@@ -23,6 +23,9 @@
     "xml-name-validator": "~2.0.1",
     "xpath": "0.0.5"
   },
+  "overrides": {
+    "minimatch": ">=10.2.1"
+  },
   "scripts": {
     "test": "mocha"
   }
