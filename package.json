@@ -2,7 +2,7 @@
   "name": "@banno/saml",
   "version": "0.23.0",
   "devDependencies": {
-    "mocha": "^10.2.0",
+    "mocha": "^10.8.2",
     "should": "~1.2.1"
   },
   "main": "./lib",
@@ -14,17 +14,18 @@
   "author": "Matias Woloski (Auth0)",
   "license": "MIT",
   "dependencies": {
-    "@xmldom/xmldom": "^0.7.4",
+    "@xmldom/xmldom": "^0.8.13",
     "async": "^3.2.4",
     "moment": "^2.29.4",
     "valid-url": "~1.0.9",
-    "xml-crypto": "^2.1.6",
+    "xml-crypto": "^3.2.1",
     "xml-encryption": "^3.0.2",
     "xml-name-validator": "~2.0.1",
     "xpath": "0.0.5"
   },
   "overrides": {
-    "minimatch": ">=10.2.1"
+    "minimatch": ">=10.2.3",
+    "serialize-javascript": ">=7.0.5"
   },
   "scripts": {
     "test": "mocha"
