@@ -353,6 +353,52 @@ describe('saml 2.0', function () {
         assert.equal('123', attributes[4].textContent);
       });
 
+      it('should set FriendlyName in attributes when includeFriendlyName is true', function () {
+        var options = {
+          cert: fs.readFileSync(__dirname + '/test-auth0.pem'),
+          key: fs.readFileSync(__dirname + '/test-auth0.key'),
+          typedAttributes: false,
+          includeAttributeNameFormat: false,
+          includeFriendlyName: true,
+          attributes: {
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress': 'foo@bar.com',
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name': 'Foo Bar',
+            'http://example.org/claims/testemptyarray': [], // should dont include empty arrays
+            'testaccent': 'fóo', // should supports accents
+            'urn:test:1:2:3': true,
+            '123~oo': 123,
+            'http://undefinedattribute/ws/com.com': undefined
+          }
+        };
+
+        var signedAssertion = saml[createAssertion](options);
+
+        assertSignature(signedAssertion, options);
+
+        var attributes = utils.getAttributes(signedAssertion);
+        assert.equal(5, attributes.length);
+        assert.equal('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress', attributes[0].getAttribute('Name'));
+        assert.equal('', attributes[0].getAttribute('NameFormat'));
+        assert.equal('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress', attributes[0].getAttribute('FriendlyName'));
+        assert.equal('foo@bar.com', attributes[0].textContent);
+        assert.equal('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name', attributes[1].getAttribute('Name'));
+        assert.equal('', attributes[1].getAttribute('NameFormat'));
+        assert.equal('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name', attributes[1].getAttribute('FriendlyName'));
+        assert.equal('Foo Bar', attributes[1].textContent);
+        assert.equal('testaccent', attributes[2].getAttribute('Name'));
+        assert.equal('', attributes[2].getAttribute('NameFormat'));
+        assert.equal('testaccent', attributes[2].getAttribute('FriendlyName'));
+        assert.equal('fóo', attributes[2].textContent);
+        assert.equal('urn:test:1:2:3', attributes[3].getAttribute('Name'));
+        assert.equal('', attributes[3].getAttribute('NameFormat'));
+        assert.equal('urn:test:1:2:3', attributes[3].getAttribute('FriendlyName'));
+        assert.equal('true', attributes[3].textContent);
+        assert.equal('123~oo', attributes[4].getAttribute('Name'));
+        assert.equal('', attributes[4].getAttribute('NameFormat'));
+        assert.equal('123~oo', attributes[4].getAttribute('FriendlyName'));
+        assert.equal('123', attributes[4].textContent);
+      });
+
       it('should ignore undefined attributes in array', function () {
         var options = {
           cert: fs.readFileSync(__dirname + '/test-auth0.pem'),
