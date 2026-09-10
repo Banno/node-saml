@@ -44,6 +44,7 @@
         createSignedSamlResponse?: boolean;
         responseSigningLevel?: string;
         destination?: string;
+        includeAttributeFriendlyName?: boolean;
     }
   
     export namespace Saml11 {
