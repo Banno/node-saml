@@ -45,6 +45,7 @@
         responseSigningLevel?: string;
         destination?: string;
         includeAttributeFriendlyName?: boolean;
+        encryptionDigestAlgorithm?: string;
     }
   
     export namespace Saml11 {
