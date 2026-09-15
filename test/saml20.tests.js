@@ -843,6 +843,46 @@ describe('saml 2.0', function () {
           });
         });
       });
+
+      it('should create SAML 2.0 response with encypted assertion using RSA-OAEP and AES-256-CBC and sha256 digest method', function (done) {
+        var options = {
+          cert: fs.readFileSync(__dirname + '/test-auth0.pem'),
+          key: fs.readFileSync(__dirname + '/test-auth0.key'),
+          encryptionPublicKey: fs.readFileSync(__dirname + '/test-auth0_rsa.pub'),
+          encryptionCert: fs.readFileSync(__dirname + '/test-auth0.pem'),
+          digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
+          xpathToNodeBeforeSignature: "//*[local-name(.)='Issuer']",
+          createSignedSamlResponse: true,
+          responseSigningLevel: 'AssertionAndResponse',
+          destination: 'https:/foo.com',
+          attributes: {
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress': 'foo@bar.com',
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name': 'Foo Bar',
+            'http://example.org/claims/testaccent': 'fóo', // should supports accents
+            'http://undefinedattribute/ws/com.com': undefined
+          }
+        };
+
+        saml.create(options, function(err, responseData) {
+          if (err) return done(err);
+
+          // Response Signature
+          isValid = utils.isValidResponseSignature(responseData, options.cert);
+          assert.equal(true, isValid);
+
+          // Assertion Signature
+          var isValid = utils.isValidSignature(responseData, options.cert);
+          assert.equal(true, isValid);
+                  
+          var encryptedData = utils.getEncryptedData(responseData);
+
+                      //validate that encrypted digest is sha 256
+          var encryptedDataDoc = new Parser().parseFromString(encryptedData.toString());
+          var encryptionMethod = encryptedDataDoc.getElementsByTagName('xenc:DigestMethod')[0];
+          assert.equal('http://www.w3.org/2001/04/xmlenc#sha256', encryptionMethod.getAttribute('Algorithm'));
+
+        });
+      });
     });
 
   });
