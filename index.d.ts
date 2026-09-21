@@ -46,6 +46,7 @@
         destination?: string;
         includeAttributeFriendlyName?: boolean;
         encryptionDigestAlgorithm?: string;
+        keyEncryptionMgfAlgorithm?: string;
     }
   
     export namespace Saml11 {
