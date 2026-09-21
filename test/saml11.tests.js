@@ -312,13 +312,13 @@ describe('saml 1.1', function () {
         cert: fs.readFileSync(__dirname + '/test-auth0.pem'),
         key: fs.readFileSync(__dirname + '/test-auth0.key'),
         encryptionPublicKey: fs.readFileSync(__dirname + '/test-auth0_rsa.pub'),
-        encryptionCert: fs.readFileSync(__dirname + '/test-auth0.pem')
+        encryptionCert: fs.readFileSync(__dirname + '/test-auth0.pem')        
       };
 
       saml11.create(options, function(err, encrypted) {
         if (err) return done(err);
         
-        xmlenc.decrypt(encrypted, { key: fs.readFileSync(__dirname + '/test-auth0.key')}, function(err, decrypted) {
+        xmlenc.decrypt(encrypted, { key: fs.readFileSync(__dirname + '/test-auth0.key'), disallowDecryptionWithInsecureAlgorithm: false }, function(err, decrypted) {
           if (err) return done(err);
           var isValid = utils.isValidSignature(decrypted, options.cert);
           assert.equal(true, isValid);
@@ -339,7 +339,7 @@ describe('saml 1.1', function () {
       saml11.create(options, function(err, encrypted, proofSecret) {
         if (err) return done(err);
         
-        xmlenc.decrypt(encrypted, { key: fs.readFileSync(__dirname + '/test-auth0.key')}, function(err, decrypted) {
+        xmlenc.decrypt(encrypted, { key: fs.readFileSync(__dirname + '/test-auth0.key'), disallowDecryptionWithInsecureAlgorithm: false }, function(err, decrypted) {
           if (err) return done(err);
           
           var doc = new xmldom.DOMParser().parseFromString(decrypted);
@@ -375,7 +375,7 @@ describe('saml 1.1', function () {
       saml11.create(options, function(err, encrypted) {
         if (err) return done(err);
         
-        xmlenc.decrypt(encrypted, { key: fs.readFileSync(__dirname + '/test-auth0.key')}, function(err, decrypted) {
+        xmlenc.decrypt(encrypted, { key: fs.readFileSync(__dirname + '/test-auth0.key'), disallowDecryptionWithInsecureAlgorithm: false }, function(err, decrypted) {
           if (err) return done(err);
 
           var isValid = utils.isValidSignature(decrypted, options.cert);
