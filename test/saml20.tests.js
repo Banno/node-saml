@@ -850,8 +850,9 @@ describe('saml 2.0', function () {
           key: fs.readFileSync(__dirname + '/test-auth0.key'),
           encryptionPublicKey: fs.readFileSync(__dirname + '/test-auth0_rsa.pub'),
           encryptionCert: fs.readFileSync(__dirname + '/test-auth0.pem'),
-          keyEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p',
-          encryptionDigestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
+          keyEncryptionAlgorithm: 'http://www.w3.org/2009/xmlenc11#rsa-oaep',
+          encryptionDigestAlgorithm: 'sha256',
+          keyEncryptionMgfAlgorithm: 'sha256',
           xpathToNodeBeforeSignature: "//*[local-name(.)='Issuer']",
           createSignedSamlResponse: true,
           responseSigningLevel: 'AssertionAndResponse',
@@ -876,12 +877,11 @@ describe('saml 2.0', function () {
           assert.equal(true, isValid);
                   
           var encryptedData = utils.getEncryptedData(responseData);
-
           //validate that encrypted digest is sha 256
           var encryptedDataDoc = new xmldom.DOMParser().parseFromString(encryptedData.toString());
           var encryptionMethod = encryptedDataDoc.getElementsByTagName('DigestMethod')[0];
           assert.equal('http://www.w3.org/2001/04/xmlenc#sha256', encryptionMethod.getAttribute('Algorithm'));
-
+     
           done();
         });
       });
