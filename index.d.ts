@@ -26,7 +26,7 @@
         inResponseTo?: string;
         issuer?: string;
         key: Buffer;
-        keyEncryptionAlgorighm?: string; // sic https://github.com/auth0/node-xml-encryption/issues/17
+        keyEncryptionAlgorithm?: string; // sic https://github.com/auth0/node-xml-encryption/issues/17. - NO LONGER REQUIRED
         keyInfoProvider?: KeyInfoProvider;
         lifetimeInSeconds?: number;
         nameIdentifier?: string;
